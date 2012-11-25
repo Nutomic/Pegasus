@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+<!-- Copyright (C) 2012 Felix Ableitner
+
+     Licensed under the Apache License, Version 2.0 (the "License");
+     you may not use this file except in compliance with the License.
+     You may obtain a copy of the License at
+
+          http://www.apache.org/licenses/LICENSE-2.0
+
+     Unless required by applicable law or agreed to in writing, software
+     distributed under the License is distributed on an "AS IS" BASIS,
+     WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+     See the License for the specific language governing permissions and
+     limitations under the License.
+-->
+    
+    
+    <!-- General -->
+    <string name="app_name">Pegasus</string>
+    
+    <!-- SQL -->
+    <string name="sql_area_unknown">Unknown Area</string>
+    <string name="sql_profile_normal">Normal</string>
+    <string name="sql_profile_silent">Silent</string>
+    <string name="sql_area_home">Home</string>
+    <string name="sql_area_work">Work</string>
+    
+    <!-- AreaList -->
+    <string name="arealist_label">Areas</string>
+    <string name="arealist_intro_title">Welcome</string>
+    <string name="arealist_intro_text">This app automatically activates different profiles when you enter certain areas.\n\nTo get started, choose or create an area you are currently at, long click on it and choose \'learn\'. Select the interval you were or will be in the area.\n\nThe app will then apply the associated profile whenever you enter the area (note that inaccuracies of multiple kilometers/miles may occur).\n\nYou can see the current area and profile in the notification.</string>
+    <string name="arealist_profile_none">None</string>
+    <string name="arealist_profile_choose">Choose Profile</string>
+    <string name="arealist_learn">Learn Area</string>
+    <string name="arealist_rename">Rename Area</string>
+    <string name="arealist_delete">Delete Area</string>
+    <string name="arealist_delete_message">Do you really want to delete this area?</string>
+    <string name="arealist_new">New Area</string>
+    
+    <string-array name="arealist_learn_area_strings">
+        <item>Next 6 hours</item>
+        <item>Next 3 hours</item>
+        <item>Next 2 hours</item>
+        <item>Next hour</item>
+        <item>Next 30 minutes</item>
+        <item>Next 10 minutes</item>
+        <item>Next 5 minutes</item>
+        <item>Next minute</item>
+        <item>Last minute</item>
+        <item>Last 5 minutes</item>
+        <item>Last 10 minutes</item>
+        <item>Last 30 minutes</item>
+        <item>Last hour</item>
+        <item>Last 2 hours</item>
+        <item>Last 3 hours</item>
+        <item>Last 6 hours</item>
+    </string-array>
+    
+    <!-- ProfileList -->
+    <string name="profilelist_label">Profiles</string>
+    <string name="profilelist_delete">Delete Profile</string>
+    <string name="profilelist_delete_message">Do you really want to delete this profile?</string>
+    <string name="profilelist_rename">Rename Profile</string>
+    <string name="profilelist_new">New Profile</string>
+    <string name="profilelist_edit">Edit Profile</string>
+    
+    <!-- ProfileEdit -->
+    <string name="profileedit_volume_choose">Please choose the volume level</string>
+    <string name="profileedit_ringtone">Ringtone Volume</string>
+    <string name="profileedit_notification">Notification Volume</string>
+    <string name="profileedit_media">Media Volume</string>
+    <string name="profileedit_alarm">Alarm Volume</string>
+    <string name="profileedit_ringer">Ringer Mode</string>
+    <string name="profileedit_wifi">Wifi Enabled</string>
+    <string-array name="profileedit_ringer_mode_strings">
+        <item>Normal</item>
+        <item>Silent</item>
+        <item>Vibrate only</item>
+    </string-array>
+    
+    <!-- LocationService -->
+    <string name="locationservice_area_unknown">Unknown Area</string>
+    <string name="locationservice_profile_none">No profile</string>
+    
+</resources>

@@ -1,0 +1,14 @@
+# Basic config from http://stackoverflow.com/a/2466662/1837158
+
+-dontskipnonpubliclibraryclasses
+-dontobfuscate
+-forceprocessing
+-optimizationpasses 5
+
+-keep class * extends android.app.Activity
+-keep class * extends android.app.Service
+-keep class * extends android.view.View
+-assumenosideeffects class android.util.Log {
+    public static *** d(...);
+    public static *** v(...);
+}

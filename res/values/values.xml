@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Copyright (C) 2012 Felix Ableitner
+
+     Licensed under the Apache License, Version 2.0 (the "License");
+     you may not use this file except in compliance with the License.
+     You may obtain a copy of the License at
+
+          http://www.apache.org/licenses/LICENSE-2.0
+
+     Unless required by applicable law or agreed to in writing, software
+     distributed under the License is distributed on an "AS IS" BASIS,
+     WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+     See the License for the specific language governing permissions and
+     limitations under the License.
+-->
+
+<resources>
+    
+    <!-- General -->
+    <string name="version_name">0.1.0</string>
+    
+    <!-- AreaList -->
+    <!-- Millisecond values for R.stringarray.arealist_learn_area_strings -->
+    <integer-array name="arealist_learn_area_values">
+        <item>21600000</item>
+        <item>10800000</item>
+        <item>7200000</item>
+        <item>3600000</item>
+        <item>1800000</item>
+        <item>600000</item>
+        <item>300000</item>
+        <item>60000</item>
+		<item>-60000</item>
+		<item>-300000</item>
+		<item>-600000</item>
+		<item>-1800000</item>
+		<item>-3600000</item>
+		<item>-7200000</item>
+		<item>-10800000</item>
+		<item>-21600000</item>
+    </integer-array>
+    
+    <!-- ProfileEdit -->
+    <string-array name="profileedit_ringer_mode_values">
+        <item>"2"</item> <!-- AudioManager.RINGER_MODE_NORMALAudioManager.RINGER_MODE_NORMAL -->
+        <item>"0"</item> <!-- AudioManager.RINGER_MODE_NORMALAudioManager.RINGER_MODE_SILENT -->
+        <item>"1"</item> <!-- AudioManager.RINGER_MODE_NORMALAudioManager.RINGER_MODE_VIBRATE -->
+    </string-array>
+    
+</resources>

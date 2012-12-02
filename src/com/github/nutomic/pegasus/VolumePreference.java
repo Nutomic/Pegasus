@@ -16,23 +16,35 @@
 
 package com.github.nutomic.pegasus;
 
+import android.app.AlertDialog;
 import android.content.Context;
-import android.preference.DialogPreference;
+import android.content.DialogInterface;
+import android.content.DialogInterface.OnClickListener;
+import android.preference.Preference;
 import android.util.AttributeSet;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
+import android.widget.CheckBox;
+import android.widget.CompoundButton;
+import android.widget.CompoundButton.OnCheckedChangeListener;
 import android.widget.SeekBar;
 
+import com.github.nutomic.pegasus.content.ProfileColumns;
+
 /**
- * Preference that opens a SeekBar dialog.
+ * Preference that opens a SeekBar dialog and has a CheckBox, only if the 
+ * CheckBox is checked is the value applied (but it is always saved).
  * 
  * @author Felix Ableitner
  *
  */
-public class VolumePreference extends DialogPreference {
+public class VolumePreference extends Preference implements 
+		OnCheckedChangeListener, android.view.View.OnClickListener {
 	
-	private int mMax;
+	private CheckBox mCheckBox;
 	private int mProgress;
-	private SeekBar mSeekBar;
+	private int mMax;
 	
 	/**
 	 * Initialize layout, set Preference not persistent-
@@ -41,20 +53,23 @@ public class VolumePreference extends DialogPreference {
         super(context, attrs);
 
         setPersistent(false);
-        setDialogLayoutResource(R.layout.seekbar_dialog);
-   
-        setPositiveButtonText(android.R.string.ok);
-        setNegativeButtonText(android.R.string.cancel);
+        setLayoutResource(R.layout.volume_preference);
     }
-
+    
+    /**
+     * Initialize OnClickListeners.
+     */
     @Override
-    protected void onBindDialogView(View view) {
-        super.onBindDialogView(view);
-
-        mSeekBar = (SeekBar) view.findViewById(R.id.seekbar);
+    public View getView(View convertView, ViewGroup parent) {
+    	View view = super.getView(convertView, parent);
         
-		mSeekBar.setProgress(mProgress);
-		mSeekBar.setMax(mMax);	
+        View layout = view.findViewById(R.id.text_layout);
+        layout.setOnClickListener(this);
+
+        mCheckBox = (CheckBox) view.findViewById(R.id.profile_checkbox);
+        mCheckBox.setOnCheckedChangeListener(this);
+    	
+    	return view;
     }
     
     /**
@@ -62,30 +77,71 @@ public class VolumePreference extends DialogPreference {
      */
     @Override
     public void setDefaultValue(Object defaultValue) {
-		mProgress = (Integer) defaultValue;
-    	if (mSeekBar != null) {
-    		mSeekBar.setProgress((Integer) defaultValue);
-    	}
+		mProgress = (Integer) defaultValue;	
+		if (mProgress >= 0) {
+			mCheckBox.setChecked(true);			
+		}
+		else {
+			mCheckBox.setChecked(false);
+			// Set progress to the actual volume value.
+			mProgress += ProfileColumns.VOLUME_APPLY_FALSE;
+		}
     }
     
     /**
      * Set the maximum value for the SeekBar.
      */
     public void setMaxValue(int max) {
-		mMax = max;
-    	if (mSeekBar != null) {
-    		mSeekBar.setMax(max);	
-    	}
+    	mMax = max;
     }
-	
-    /**
-     * Send new value to listener (if positive button was clicked).
-     */
+
+	/**
+	 * CheckBox value was changed.
+	 */
 	@Override
-	protected void onDialogClosed(boolean positiveResult) {
-		if (positiveResult) {
-			mProgress = mSeekBar.getProgress();
-			callChangeListener(mProgress);			
-		}
+	public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+		callChangeListener();
 	}
+	
+	/**
+	 * Calls the change listener for this preference, with VOLUME_APPLY_FALSE 
+	 * subtracted if the CheckBox is unchecked.
+	 */
+	private void callChangeListener() {
+		callChangeListener((mCheckBox.isChecked()) 
+				? mProgress 
+				: mProgress - ProfileColumns.VOLUME_APPLY_FALSE);			
+	}
+
+	/**
+	 * Left part (text) clicked, show volume dialog.
+	 */
+	@Override
+	public void onClick(View v) {
+		// Initialize dialog layout.
+		LayoutInflater inflater = (LayoutInflater) getContext()
+				.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+		View view = inflater.inflate(R.layout.seekbar_dialog, null);
+        final SeekBar seekBar = (SeekBar) view.findViewById(R.id.seekbar); 
+		seekBar.setMax(mMax); 
+		seekBar.setProgress((mProgress >= 0) 
+				? mProgress 
+				: mProgress + ProfileColumns.VOLUME_APPLY_FALSE);
+		
+		// Create and show dialog.
+		new AlertDialog.Builder(getContext())
+				.setTitle(getTitle())
+				.setView(view)
+				.setPositiveButton(android.R.string.ok, new OnClickListener() {
+					
+					@Override
+					public void onClick(DialogInterface dialog, int which) {
+						mProgress = seekBar.getProgress();	
+						callChangeListener();				
+					}
+				})
+				.setNegativeButton(android.R.string.cancel, null)
+				.show();        
+	}
+	
 }

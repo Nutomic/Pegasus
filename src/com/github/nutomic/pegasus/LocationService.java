@@ -252,23 +252,35 @@ public class LocationService extends Service {
 						WifiManager wm = (WifiManager) context
 								.getSystemService(Context.WIFI_SERVICE);
 
-						am.setStreamVolume(AudioManager.STREAM_RING, 
-								c.getInt(c.getColumnIndex(ProfileColumns.RINGTONE_VOLUME)),
-								AudioManager.FLAG_REMOVE_SOUND_AND_VIBRATE);
+						// Value smaller zero means the volume should not change.
+						if (c.getInt(c.getColumnIndex(ProfileColumns.RINGTONE_VOLUME)) >= 0) {
+							am.setStreamVolume(AudioManager.STREAM_RING, 
+									c.getInt(c.getColumnIndex(ProfileColumns.RINGTONE_VOLUME)),
+									AudioManager.FLAG_REMOVE_SOUND_AND_VIBRATE);
+						}
 
-						am.setStreamVolume(AudioManager.STREAM_NOTIFICATION, 
-								c.getInt(c.getColumnIndex(ProfileColumns.NOTIFICATION_VOLUME)), 
-								AudioManager.FLAG_REMOVE_SOUND_AND_VIBRATE);
+						if (c.getInt(c.getColumnIndex(ProfileColumns.NOTIFICATION_VOLUME)) >= 0) {
+							am.setStreamVolume(AudioManager.STREAM_NOTIFICATION, 
+									c.getInt(c.getColumnIndex(ProfileColumns.NOTIFICATION_VOLUME)), 
+									AudioManager.FLAG_REMOVE_SOUND_AND_VIBRATE);
+						}
 
-						am.setStreamVolume(AudioManager.STREAM_MUSIC, 
-								c.getInt(c.getColumnIndex(ProfileColumns.MEDIA_VOLUME)),
-								AudioManager.FLAG_REMOVE_SOUND_AND_VIBRATE);
+						if (c.getInt(c.getColumnIndex(ProfileColumns.MEDIA_VOLUME)) >= 0) {
+							am.setStreamVolume(AudioManager.STREAM_MUSIC, 
+									c.getInt(c.getColumnIndex(ProfileColumns.MEDIA_VOLUME)),
+									AudioManager.FLAG_REMOVE_SOUND_AND_VIBRATE);
+						}
 
-						am.setStreamVolume(AudioManager.STREAM_ALARM, 
-								c.getInt(c.getColumnIndex(ProfileColumns.ALARM_VOLUME)),
-								AudioManager.FLAG_REMOVE_SOUND_AND_VIBRATE);
+						if (c.getInt(c.getColumnIndex(ProfileColumns.ALARM_VOLUME)) >= 0) {
+							am.setStreamVolume(AudioManager.STREAM_ALARM, 
+									c.getInt(c.getColumnIndex(ProfileColumns.ALARM_VOLUME)),
+									AudioManager.FLAG_REMOVE_SOUND_AND_VIBRATE);
+						}
 
-						am.setRingerMode(c.getInt(c.getColumnIndex(ProfileColumns.RINGER_MODE)));
+						if (c.getInt(c.getColumnIndex(ProfileColumns.RINGER_MODE)) != 
+								ProfileColumns.RINGER_MODE_KEEP) {
+							am.setRingerMode(c.getInt(c.getColumnIndex(ProfileColumns.RINGER_MODE)));
+						}
 
 						wm.setWifiEnabled((c.getInt(c.getColumnIndex(ProfileColumns.WIFI_ENABLED)) == 0)
 								? true : false);

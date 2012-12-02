@@ -75,26 +75,27 @@ public class Database extends SQLiteOpenHelper {
 		db.execSQL(CellColumns.CREATE_TABLE);
 		db.execSQL(CellLogColumns.CREATE_TABLE);
 		
-		// Insert "Normal" profile.
+		// Insert "Normal" profile. Does not change any settings by default.
 		ContentValues cv = new ContentValues();
 		cv.put(ProfileColumns.NAME, mContext.getResources()
 				.getString(R.string.sql_profile_normal));
-		cv.put(ProfileColumns.RINGTONE_VOLUME, 5);
-		cv.put(ProfileColumns.NOTIFICATION_VOLUME, 5);
-		cv.put(ProfileColumns.MEDIA_VOLUME, 9);
-		cv.put(ProfileColumns.ALARM_VOLUME, 5);
+		cv.put(ProfileColumns.RINGTONE_VOLUME, 5 - ProfileColumns.VOLUME_APPLY_FALSE);
+		cv.put(ProfileColumns.NOTIFICATION_VOLUME, 5 - ProfileColumns.VOLUME_APPLY_FALSE);
+		cv.put(ProfileColumns.MEDIA_VOLUME, 9 - ProfileColumns.VOLUME_APPLY_FALSE);
+		cv.put(ProfileColumns.ALARM_VOLUME, 5 - ProfileColumns.VOLUME_APPLY_FALSE);
 		cv.put(ProfileColumns.WIFI_ENABLED, true);
-		cv.put(ProfileColumns.RINGER_MODE, AudioManager.RINGER_MODE_NORMAL);
+		cv.put(ProfileColumns.RINGER_MODE, ProfileColumns.RINGER_MODE_KEEP);
 		long normal = db.insert(ProfileColumns.TABLE_NAME, null, cv);
 		
-		// Insert "Silent" profile.
+		// Insert "Silent" profile. Changes ringtone and notification 
+		// volume by default and enables vibration.
 		cv = new ContentValues();
 		cv.put(ProfileColumns.NAME, mContext.getResources()
 				.getString(R.string.sql_profile_silent));
 		cv.put(ProfileColumns.RINGTONE_VOLUME, 0);
 		cv.put(ProfileColumns.NOTIFICATION_VOLUME, 0);
-		cv.put(ProfileColumns.MEDIA_VOLUME, 0);
-		cv.put(ProfileColumns.ALARM_VOLUME, 0);
+		cv.put(ProfileColumns.MEDIA_VOLUME, 0 - ProfileColumns.VOLUME_APPLY_FALSE);
+		cv.put(ProfileColumns.ALARM_VOLUME, 0 - ProfileColumns.VOLUME_APPLY_FALSE);
 		cv.put(ProfileColumns.WIFI_ENABLED, true);
 		cv.put(ProfileColumns.RINGER_MODE, AudioManager.RINGER_MODE_VIBRATE);
 		long silent = db.insert(ProfileColumns.TABLE_NAME, null, cv);

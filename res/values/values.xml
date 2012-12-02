@@ -42,6 +42,7 @@
     
     <!-- ProfileEdit -->
     <string-array name="profileedit_ringer_mode_values">
+        <item>"-1"</item> <!-- ProfileColumns.RINGER_MODE_KEEP -->
         <item>"2"</item> <!-- AudioManager.RINGER_MODE_NORMALAudioManager.RINGER_MODE_NORMAL -->
         <item>"0"</item> <!-- AudioManager.RINGER_MODE_NORMALAudioManager.RINGER_MODE_SILENT -->
         <item>"1"</item> <!-- AudioManager.RINGER_MODE_NORMALAudioManager.RINGER_MODE_VIBRATE -->

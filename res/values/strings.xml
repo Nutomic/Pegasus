@@ -74,6 +74,7 @@
     <string name="profileedit_ringer">Ringer Mode</string>
     <string name="profileedit_wifi">Wifi Enabled</string>
     <string-array name="profileedit_ringer_mode_strings">
+        <item>Keep previous</item>
         <item>Normal</item>
         <item>Silent</item>
         <item>Vibrate only</item>

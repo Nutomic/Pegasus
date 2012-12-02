@@ -48,5 +48,17 @@ public class ProfileColumns implements BaseColumns {
 			WIFI_ENABLED + " INTEGER," +
 			RINGER_MODE + " INTEGER" +
 		    ");";
+
+	/**
+	 * This value is subtracted from any volume value if it should not 
+	 * be applied (only saved). Generally allows for easy testing by 
+	 * checking if the value is smaller than zero.
+	 */
+	public static final int VOLUME_APPLY_FALSE = 100;
+	
+	/**
+	 * Value to indicate that AlarmManager.setRingerMode should not be used.
+	 */
+	public static final int RINGER_MODE_KEEP = -1;
 	  
 }

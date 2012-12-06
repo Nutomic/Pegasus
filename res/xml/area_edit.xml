@@ -25,5 +25,10 @@
         android:key="wifi_enabled"
         android:title="@string/areaedit_wifi"
         android:persistent="false" />
+    
+    <CheckBoxPreference
+        android:key="bluetooth_enabled"
+        android:title="@string/areaedit_bluetooth"
+        android:persistent="false" />
 
 </PreferenceScreen>

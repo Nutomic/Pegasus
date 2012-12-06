@@ -41,6 +41,7 @@
     <!-- AreaEdit -->
     <string name="areaedit_profile">Profile</string>
     <string name="areaedit_wifi">Wifi Enabled</string>
+    <string name="areaedit_bluetooth">Bluetooth Enabled</string>
     
     <string-array name="arealist_learn_area_strings">
         <item>Next 6 hours</item>
@@ -85,6 +86,5 @@
     
     <!-- LocationService -->
     <string name="locationservice_area_unknown">Unknown Area</string>
-    <string name="locationservice_profile_none">No profile</string>
     
 </resources>

@@ -21,11 +21,11 @@ import java.util.Set;
 import android.app.Notification;
 import android.app.PendingIntent;
 import android.app.Service;
+import android.bluetooth.BluetoothAdapter;
 import android.content.ContentValues;
 import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
-import android.database.DatabaseUtils;
 import android.media.AudioManager;
 import android.net.wifi.WifiManager;
 import android.os.Bundle;
@@ -213,7 +213,7 @@ public class LocationService extends Service {
 					Cursor c = db.getReadableDatabase().query(
 							AreaColumns.TABLE_NAME + " as a, " + CellColumns.TABLE_NAME + " as c",
 							new String[] { "a." + AreaColumns.PROFILE_ID, "a." + AreaColumns.NAME,
-									"a." + AreaColumns.WIFI_ENABLED },
+									"a." + AreaColumns.WIFI_ENABLED, "a." + AreaColumns.BLUETOOTH_ENABLED},
 							"a." + AreaColumns._ID + " = c." + CellColumns.AREA_ID + " AND " +
 									"c." + CellColumns.CELL_ID + " = ? AND " +
 									"c." + CellColumns.CELL_TYPE + " = ?",
@@ -227,10 +227,21 @@ public class LocationService extends Service {
 					if (c.moveToFirst()) {
 						profileId = c.getLong(c.getColumnIndex(AreaColumns.PROFILE_ID));
 						areaName = c.getString(c.getColumnIndex(AreaColumns.NAME));
+						
 						WifiManager wm = (WifiManager) LocationService.this
 								.getSystemService(Context.WIFI_SERVICE);
 						wm.setWifiEnabled((c.getInt(c.getColumnIndex(AreaColumns.WIFI_ENABLED))  == 1)
 								? true : false);
+						
+						BluetoothAdapter bt = BluetoothAdapter.getDefaultAdapter();
+						if (bt != null) {
+							if ((c.getInt(c.getColumnIndex(AreaColumns.BLUETOOTH_ENABLED)) == 1)) {
+								bt.enable();
+							}
+							else {
+								bt.disable();
+							}
+						}
 					}
 					else {
 						areaName = getResources().getString(

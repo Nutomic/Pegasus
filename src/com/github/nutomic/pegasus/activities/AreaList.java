@@ -357,6 +357,8 @@ public class AreaList extends ListActivity {
 					cv.put(AreaColumns.NAME, getResources()
 							.getString(R.string.arealist_new));
 					cv.put(AreaColumns.PROFILE_ID, Database.ROW_NONE);
+					cv.put(AreaColumns.WIFI_ENABLED, true);
+					cv.put(AreaColumns.BLUETOOTH_ENABLED, false);
 					return Database.getInstance(AreaList.this).getWritableDatabase()
 							.insert(AreaColumns.TABLE_NAME, null, cv);
 				}

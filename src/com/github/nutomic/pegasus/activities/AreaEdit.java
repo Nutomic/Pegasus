@@ -27,7 +27,6 @@ import android.preference.Preference;
 import android.preference.Preference.OnPreferenceChangeListener;
 import android.preference.Preference.OnPreferenceClickListener;
 import android.preference.PreferenceActivity;
-import android.util.Log;
 import android.util.Pair;
 
 import com.github.nutomic.pegasus.LocationService;
@@ -55,6 +54,7 @@ public class AreaEdit extends PreferenceActivity implements
 	private long mArea;
 	private Preference mProfile;
 	private CheckBoxPreference mWifi;
+	private CheckBoxPreference mBluetooth;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -70,7 +70,8 @@ public class AreaEdit extends PreferenceActivity implements
 			protected Cursor doInBackground(Void... params) {
 				return Database.getInstance(AreaEdit.this).getReadableDatabase()
 						.query(AreaColumns.TABLE_NAME, 
-								new String[] { AreaColumns.WIFI_ENABLED }, 
+								new String[] { AreaColumns.WIFI_ENABLED, 
+								AreaColumns.BLUETOOTH_ENABLED }, 
 								AreaColumns._ID + " = ?", 
 								new String[] { Long.toString(mArea) }, 
 								null, null, null);
@@ -78,8 +79,7 @@ public class AreaEdit extends PreferenceActivity implements
 			
 			@Override
 			protected void onPostExecute(Cursor c) {
-				c.moveToFirst();
-				// TODO: nothing here works				
+				c.moveToFirst();	
 				mProfile = findPreference("profile");
 				mProfile.setOnPreferenceClickListener(AreaEdit.this);
 				
@@ -87,6 +87,11 @@ public class AreaEdit extends PreferenceActivity implements
 				mWifi.setChecked((c.getInt(c.getColumnIndex(AreaColumns.WIFI_ENABLED)) == 1) 
 						? true : false);
 				mWifi.setOnPreferenceChangeListener(AreaEdit.this);
+				
+				mBluetooth = (CheckBoxPreference) findPreference("bluetooth_enabled");
+				mBluetooth.setChecked((c.getInt(c.getColumnIndex(AreaColumns.BLUETOOTH_ENABLED)) == 1) 
+						? true : false);
+				mBluetooth.setOnPreferenceChangeListener(AreaEdit.this);
 			}
 		}.execute((Void) null);
 	}
@@ -98,8 +103,10 @@ public class AreaEdit extends PreferenceActivity implements
 			cv.put(AreaColumns.WIFI_ENABLED, (Boolean) newValue);
 		}
 		else if (preference.equals(mProfile)) {
-			// TODO: does not cause profile to be applied
 			cv.put(AreaColumns.PROFILE_ID, (Long) newValue);
+		}
+		else if (preference.equals(mBluetooth)) {
+			cv.put(AreaColumns.BLUETOOTH_ENABLED, (Boolean) newValue);
 		}
 		
 		final ContentValues values = cv;

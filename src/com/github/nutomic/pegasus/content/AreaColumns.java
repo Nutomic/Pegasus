@@ -34,12 +34,14 @@ public class AreaColumns implements BaseColumns {
 	public static final String NAME = "name";
 	public static final String PROFILE_ID = "profile_id";
 	public static final String WIFI_ENABLED = "wifi_enabled";
+	public static final String BLUETOOTH_ENABLED = "bluetooth_enabled";
   
 	public static final String CREATE_TABLE = "CREATE TABLE " + TABLE_NAME + " (" +
 			_ID + " INTEGER PRIMARY KEY AUTOINCREMENT," +
 			NAME + " TEXT," +
 			PROFILE_ID + " INTEGER, " +
-			WIFI_ENABLED + " INTEGER " +
+			WIFI_ENABLED + " INTEGER, " +
+			BLUETOOTH_ENABLED + " INTEGER " +
 			");";
 	  
 }

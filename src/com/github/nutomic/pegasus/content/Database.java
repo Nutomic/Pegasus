@@ -104,6 +104,7 @@ public class Database extends SQLiteOpenHelper {
 				.getString(R.string.sql_area_unknown));
 		cv.put(AreaColumns.PROFILE_ID, normal);
 		cv.put(AreaColumns.WIFI_ENABLED, false);
+		cv.put(AreaColumns.BLUETOOTH_ENABLED, false);
 		db.insert(AreaColumns.TABLE_NAME, null, cv);
 
 		// Insert "Home" area.
@@ -112,6 +113,7 @@ public class Database extends SQLiteOpenHelper {
 				.getString(R.string.sql_area_home));
 		cv.put(AreaColumns.PROFILE_ID, normal);
 		cv.put(AreaColumns.WIFI_ENABLED, true);
+		cv.put(AreaColumns.BLUETOOTH_ENABLED, false);
 		db.insert(AreaColumns.TABLE_NAME, null, cv);
 
 		// Insert "Work" area.
@@ -120,20 +122,26 @@ public class Database extends SQLiteOpenHelper {
 				.getString(R.string.sql_area_work));
 		cv.put(AreaColumns.PROFILE_ID, silent);
 		cv.put(AreaColumns.WIFI_ENABLED, true);
+		cv.put(AreaColumns.BLUETOOTH_ENABLED, false);
 		db.insert(AreaColumns.TABLE_NAME, null, cv);
 	}
 
 	@Override
 	public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
-		// Move wifi preference from profile to area.
 		if (oldVersion == 1) {
-			db.rawQuery("ALTER TABLE " + ProfileColumns.TABLE_NAME +
-					" DROP wifi_enabled", null);
-			
-			db.rawQuery("ALTER TABLE " + AreaColumns.TABLE_NAME +
-					" ADD " + AreaColumns.WIFI_ENABLED + " INTEGER", null);
+			// Add wifi preference to area (Wifi reference in area will not 
+			// be used any more).
+			db.execSQL("ALTER TABLE area " +
+					"ADD COLUMN " + AreaColumns.WIFI_ENABLED + " INTEGER;");
 			ContentValues cv = new ContentValues();
 			cv.put(AreaColumns.WIFI_ENABLED, true);
+			db.update(AreaColumns.TABLE_NAME, cv, null, null);
+			
+			// Add bluetooth column to area.
+			db.execSQL("ALTER TABLE area " +
+					"ADD COLUMN " + AreaColumns.BLUETOOTH_ENABLED + " INTEGER;");
+			cv = new ContentValues();
+			cv.put(AreaColumns.BLUETOOTH_ENABLED, false);
 			db.update(AreaColumns.TABLE_NAME, cv, null, null);
 		}
 	}

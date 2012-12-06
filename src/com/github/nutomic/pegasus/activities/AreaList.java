@@ -30,7 +30,6 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.support.v4.widget.SimpleCursorAdapter;
-import android.util.Pair;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -153,55 +152,9 @@ public class AreaList extends ListActivity {
 	 */
 	@Override
 	protected void onListItemClick(ListView l, View v, int position, long id) {
-		chooseProfile(id);
-	}
-
-	/**
-	 * Show a "pick sound profile" dialog for an area, the selected profile is
-	 * then set to be launched when entering the area.
-	 * 
-	 * @param area
-	 *            The sqlite id of the area to choose a profile for. Set -1 if 
-	 *            the area does not exist and should be created.
-	 */
-	private void chooseProfile(final long area) {
-		final Database db = Database.getInstance(this);
-		
-		// Get a pair of all area names and all area IDs.
-		Cursor c = db.getReadableDatabase().query(
-				ProfileColumns.TABLE_NAME,
-				new String[] { ProfileColumns._ID, 
-						ProfileColumns.NAME }, 
-				null, null, null, null, null);
-		String[] names = new String[c.getCount()];
-		Long[] ids = new Long[c.getCount()];
-		while (c.moveToNext()) {
-			ids[c.getPosition()] = c.getLong(c.getColumnIndex(ProfileColumns._ID));
-			names[c.getPosition()] = c.getString(c.getColumnIndex(ProfileColumns.NAME));
-		}
-		final Pair<String[], Long[]> p = Pair.create(names, ids);
-		
-		new AlertDialog.Builder(this).setTitle(R.string.arealist_profile_choose)
-				.setItems(p.first, new DialogInterface.OnClickListener() {
-
-					public void onClick(DialogInterface dialog, final int which) {
-						new UpdateTask() {
-							
-							@Override
-							protected Long doInBackground(Void... params) {
-								// Set the new profile in area.
-								ContentValues cv = new ContentValues();
-								cv.put(AreaColumns.PROFILE_ID, p.second[which]);
-
-								db.getWritableDatabase().update(AreaColumns.TABLE_NAME, 
-										cv, 
-										AreaColumns._ID + " = ?",
-										new String[] { Long.toString(area) });
-								return null;
-							}
-						}.execute((Void) null);
-					}
-				}).show();
+		Intent i = new Intent(this, AreaEdit.class);
+		i.putExtra(AreaEdit.AREA_ID, id);
+		startActivity(i);
 	}
 
 	/**
@@ -240,9 +193,6 @@ public class AreaList extends ListActivity {
 				.getMenuInfo();
 		final Database db = Database.getInstance(this);
 		switch (item.getItemId()) {
-		case R.id.choose:
-			chooseProfile(info.id);
-			return true;
 		case R.id.rename:
 			renameArea(info.id, getAreaName((AdapterContextMenuInfo) item.getMenuInfo()));
 			return true;

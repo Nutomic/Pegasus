@@ -22,7 +22,6 @@ import android.database.Cursor;
 import android.media.AudioManager;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.preference.CheckBoxPreference;
 import android.preference.ListPreference;
 import android.preference.Preference;
 import android.preference.Preference.OnPreferenceChangeListener;
@@ -35,7 +34,7 @@ import com.github.nutomic.pegasus.content.Database;
 import com.github.nutomic.pegasus.content.ProfileColumns;
 
 /**
- * Allows editing a sound profile, uses Database values (or defaults) to
+ * Allows editing a profile, uses Database values (or defaults) to
  * initialize, saves to Database.
  * 
  * Using deprecated methods because v4 support library does not have 
@@ -56,7 +55,6 @@ public class ProfileEdit extends PreferenceActivity implements
 	private VolumePreference mMediaVolume;
 	private VolumePreference mAlarmVolume;
 	private ListPreference mRingerMode;
-	private CheckBoxPreference mWifiEnabled;
 
 	/**
 	 * Initialize sound profile id from intent (extra "profile_id" must 
@@ -68,7 +66,7 @@ public class ProfileEdit extends PreferenceActivity implements
 
 		mProfile = getIntent().getExtras().getLong(PROFILE_ID);
 
-		addPreferencesFromResource(R.xml.profile);
+		addPreferencesFromResource(R.xml.profile_edit);
 
 		new AsyncTask<Void, Void, Cursor>() {
 
@@ -81,7 +79,6 @@ public class ProfileEdit extends PreferenceActivity implements
 								ProfileColumns.NOTIFICATION_VOLUME,
 								ProfileColumns.MEDIA_VOLUME, 
 								ProfileColumns.ALARM_VOLUME, 
-								ProfileColumns.WIFI_ENABLED,
 								ProfileColumns.RINGER_MODE }, 
 						"_id = ?",
 						new String[] { Long.toString(mProfile) }, 
@@ -118,11 +115,6 @@ public class ProfileEdit extends PreferenceActivity implements
 				mRingerMode = (ListPreference) findPreference("ringer_mode");
 				mRingerMode.setValue(Integer.toString(c.getInt(c.getColumnIndex(ProfileColumns.RINGER_MODE))));
 				mRingerMode.setOnPreferenceChangeListener(ProfileEdit.this);
-
-				mWifiEnabled = (CheckBoxPreference) findPreference("wifi_enabled");
-				mWifiEnabled.setChecked((c.getInt(c.getColumnIndex(ProfileColumns.WIFI_ENABLED)) == 0)
-						? true : false);
-				mWifiEnabled.setOnPreferenceChangeListener(ProfileEdit.this);
 				
 			};
 			
@@ -148,9 +140,6 @@ public class ProfileEdit extends PreferenceActivity implements
 		}
 		else if (preference.equals(mRingerMode)) {
 			cv.put(ProfileColumns.RINGER_MODE, Integer.parseInt((String) newValue));
-		}
-		else if (preference.equals(mWifiEnabled)) {
-			cv.put(ProfileColumns.RINGTONE_VOLUME, (Boolean) newValue);
 		}
 		
 		final ContentValues values = cv;

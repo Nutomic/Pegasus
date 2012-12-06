@@ -38,7 +38,7 @@ public class Database extends SQLiteOpenHelper {
 	
 	private static final String TAG = "Database";
 	private static final String DATABASE_NAME = "pegasus.db";
-	private static final int DATABASE_VERSION = 1;
+	private static final int DATABASE_VERSION = 2;
 
 	private static Database mInstance = null;
 
@@ -83,7 +83,6 @@ public class Database extends SQLiteOpenHelper {
 		cv.put(ProfileColumns.NOTIFICATION_VOLUME, 5 - ProfileColumns.VOLUME_APPLY_FALSE);
 		cv.put(ProfileColumns.MEDIA_VOLUME, 9 - ProfileColumns.VOLUME_APPLY_FALSE);
 		cv.put(ProfileColumns.ALARM_VOLUME, 5 - ProfileColumns.VOLUME_APPLY_FALSE);
-		cv.put(ProfileColumns.WIFI_ENABLED, true);
 		cv.put(ProfileColumns.RINGER_MODE, ProfileColumns.RINGER_MODE_KEEP);
 		long normal = db.insert(ProfileColumns.TABLE_NAME, null, cv);
 		
@@ -96,7 +95,6 @@ public class Database extends SQLiteOpenHelper {
 		cv.put(ProfileColumns.NOTIFICATION_VOLUME, 0);
 		cv.put(ProfileColumns.MEDIA_VOLUME, 0 - ProfileColumns.VOLUME_APPLY_FALSE);
 		cv.put(ProfileColumns.ALARM_VOLUME, 0 - ProfileColumns.VOLUME_APPLY_FALSE);
-		cv.put(ProfileColumns.WIFI_ENABLED, true);
 		cv.put(ProfileColumns.RINGER_MODE, AudioManager.RINGER_MODE_VIBRATE);
 		long silent = db.insert(ProfileColumns.TABLE_NAME, null, cv);
 
@@ -105,6 +103,7 @@ public class Database extends SQLiteOpenHelper {
 		cv.put(AreaColumns.NAME, mContext.getResources()
 				.getString(R.string.sql_area_unknown));
 		cv.put(AreaColumns.PROFILE_ID, normal);
+		cv.put(AreaColumns.WIFI_ENABLED, false);
 		db.insert(AreaColumns.TABLE_NAME, null, cv);
 
 		// Insert "Home" area.
@@ -112,6 +111,7 @@ public class Database extends SQLiteOpenHelper {
 		cv.put(AreaColumns.NAME, mContext.getResources()
 				.getString(R.string.sql_area_home));
 		cv.put(AreaColumns.PROFILE_ID, normal);
+		cv.put(AreaColumns.WIFI_ENABLED, true);
 		db.insert(AreaColumns.TABLE_NAME, null, cv);
 
 		// Insert "Work" area.
@@ -119,11 +119,23 @@ public class Database extends SQLiteOpenHelper {
 		cv.put(AreaColumns.NAME, mContext.getResources()
 				.getString(R.string.sql_area_work));
 		cv.put(AreaColumns.PROFILE_ID, silent);
+		cv.put(AreaColumns.WIFI_ENABLED, true);
 		db.insert(AreaColumns.TABLE_NAME, null, cv);
 	}
 
 	@Override
 	public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
+		// Move wifi preference from profile to area.
+		if (oldVersion == 1) {
+			db.rawQuery("ALTER TABLE " + ProfileColumns.TABLE_NAME +
+					" DROP wifi_enabled", null);
+			
+			db.rawQuery("ALTER TABLE " + AreaColumns.TABLE_NAME +
+					" ADD " + AreaColumns.WIFI_ENABLED + " INTEGER", null);
+			ContentValues cv = new ContentValues();
+			cv.put(AreaColumns.WIFI_ENABLED, true);
+			db.update(AreaColumns.TABLE_NAME, cv, null, null);
+		}
 	}
 
 }

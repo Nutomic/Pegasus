@@ -256,11 +256,10 @@ public class ProfileList extends ListActivity {
 					ContentValues cv = new ContentValues();
 					cv.put(ProfileColumns.NAME, getResources()
 							.getString(R.string.profilelist_new));
-					cv.put(ProfileColumns.RINGTONE_VOLUME, 5);
-					cv.put(ProfileColumns.NOTIFICATION_VOLUME, 5);
-					cv.put(ProfileColumns.MEDIA_VOLUME, 5);
-					cv.put(ProfileColumns.ALARM_VOLUME, 5);
-					cv.put(ProfileColumns.WIFI_ENABLED, true);
+					cv.put(ProfileColumns.RINGTONE_VOLUME, 5 - ProfileColumns.VOLUME_APPLY_FALSE);
+					cv.put(ProfileColumns.NOTIFICATION_VOLUME, 5 - ProfileColumns.VOLUME_APPLY_FALSE);
+					cv.put(ProfileColumns.MEDIA_VOLUME, 10 - ProfileColumns.VOLUME_APPLY_FALSE);
+					cv.put(ProfileColumns.ALARM_VOLUME, 5 - ProfileColumns.VOLUME_APPLY_FALSE);
 					cv.put(ProfileColumns.RINGER_MODE, AudioManager.RINGER_MODE_NORMAL);
 				
 					return Database.getInstance(ProfileList.this).getWritableDatabase()

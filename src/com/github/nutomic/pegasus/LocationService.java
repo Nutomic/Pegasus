@@ -25,6 +25,7 @@ import android.content.ContentValues;
 import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
+import android.database.DatabaseUtils;
 import android.media.AudioManager;
 import android.net.wifi.WifiManager;
 import android.os.Bundle;
@@ -210,20 +211,26 @@ public class LocationService extends Service {
 					
 					// Get area name and ID of the associated profile.
 					Cursor c = db.getReadableDatabase().query(
-							AreaColumns.TABLE_NAME + " as a, " + CellColumns.TABLE_NAME,
-							new String[] { AreaColumns.PROFILE_ID, AreaColumns.NAME },
-							"a." + AreaColumns._ID + " = " + CellColumns.AREA_ID + " AND " +
-									CellColumns.CELL_ID + " = ? AND " +
-									CellColumns.CELL_TYPE + " = ?",
-							new String[] { Integer.toString(mCurrentCell),
-									Integer.toString(mNetworkType)}, 
+							AreaColumns.TABLE_NAME + " as a, " + CellColumns.TABLE_NAME + " as c",
+							new String[] { "a." + AreaColumns.PROFILE_ID, "a." + AreaColumns.NAME,
+									"a." + AreaColumns.WIFI_ENABLED },
+							"a." + AreaColumns._ID + " = c." + CellColumns.AREA_ID + " AND " +
+									"c." + CellColumns.CELL_ID + " = ? AND " +
+									"c." + CellColumns.CELL_TYPE + " = ?",
+							new String[] { Integer.toString(cell),
+									Integer.toString(mNetworkType) }, 
 							null, null, null);
-					
+
 					long profileId = Database.ROW_NONE;
 					String areaName;
+					
 					if (c.moveToFirst()) {
 						profileId = c.getLong(c.getColumnIndex(AreaColumns.PROFILE_ID));
 						areaName = c.getString(c.getColumnIndex(AreaColumns.NAME));
+						WifiManager wm = (WifiManager) LocationService.this
+								.getSystemService(Context.WIFI_SERVICE);
+						wm.setWifiEnabled((c.getInt(c.getColumnIndex(AreaColumns.WIFI_ENABLED))  == 1)
+								? true : false);
 					}
 					else {
 						areaName = getResources().getString(
@@ -237,7 +244,6 @@ public class LocationService extends Service {
 									ProfileColumns.NOTIFICATION_VOLUME,
 									ProfileColumns.MEDIA_VOLUME, 
 									ProfileColumns.ALARM_VOLUME, 
-									ProfileColumns.WIFI_ENABLED,
 									ProfileColumns.RINGER_MODE }, 
 							"_id = ?",
 							new String[] { Long.toString(profileId) }, 
@@ -246,11 +252,8 @@ public class LocationService extends Service {
 					// Apply profile if there is one and set the name for the notification.
 					String profileName;
 					if (c.moveToFirst()) {
-						Context context = LocationService.this;
-						AudioManager am = (AudioManager) context
+						AudioManager am = (AudioManager) LocationService.this
 								.getSystemService(Context.AUDIO_SERVICE);
-						WifiManager wm = (WifiManager) context
-								.getSystemService(Context.WIFI_SERVICE);
 
 						// Value smaller zero means the volume should not change.
 						if (c.getInt(c.getColumnIndex(ProfileColumns.RINGTONE_VOLUME)) >= 0) {
@@ -281,9 +284,6 @@ public class LocationService extends Service {
 								ProfileColumns.RINGER_MODE_KEEP) {
 							am.setRingerMode(c.getInt(c.getColumnIndex(ProfileColumns.RINGER_MODE)));
 						}
-
-						wm.setWifiEnabled((c.getInt(c.getColumnIndex(ProfileColumns.WIFI_ENABLED)) == 0)
-								? true : false);
 						
 						profileName = c.getString(c.getColumnIndex(ProfileColumns.NAME));
 					}

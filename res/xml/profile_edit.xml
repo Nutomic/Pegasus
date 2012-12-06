@@ -43,9 +43,4 @@
         android:entryValues="@array/profileedit_ringer_mode_values"
         android:persistent="false" />
     
-    <CheckBoxPreference
-        android:key="wifi_enabled"
-        android:title="@string/profileedit_wifi"
-        android:persistent="false" />
-    
 </PreferenceScreen>

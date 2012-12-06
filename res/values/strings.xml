@@ -31,12 +31,16 @@
     <string name="arealist_intro_title">Welcome</string>
     <string name="arealist_intro_text">This app automatically activates different profiles when you enter certain areas.\n\nTo get started, choose or create an area you are currently at, long click on it and choose \'learn\'. Select the interval you were or will be in the area.\n\nThe app will then apply the associated profile whenever you enter the area (note that inaccuracies of multiple kilometers/miles may occur).\n\nYou can see the current area and profile in the notification.</string>
     <string name="arealist_profile_none">None</string>
-    <string name="arealist_profile_choose">Choose Profile</string>
     <string name="arealist_learn">Learn Area</string>
     <string name="arealist_rename">Rename Area</string>
     <string name="arealist_delete">Delete Area</string>
     <string name="arealist_delete_message">Do you really want to delete this area?</string>
     <string name="arealist_new">New Area</string>
+    <string name="arealist_edit">Edit Area</string>
+    
+    <!-- AreaEdit -->
+    <string name="areaedit_profile">Profile</string>
+    <string name="areaedit_wifi">Wifi Enabled</string>
     
     <string-array name="arealist_learn_area_strings">
         <item>Next 6 hours</item>
@@ -72,7 +76,6 @@
     <string name="profileedit_media">Media Volume</string>
     <string name="profileedit_alarm">Alarm Volume</string>
     <string name="profileedit_ringer">Ringer Mode</string>
-    <string name="profileedit_wifi">Wifi Enabled</string>
     <string-array name="profileedit_ringer_mode_strings">
         <item>Keep previous</item>
         <item>Normal</item>

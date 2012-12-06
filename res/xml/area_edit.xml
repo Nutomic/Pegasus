@@ -14,17 +14,16 @@
      limitations under the License.
 -->
 
-<menu xmlns:android="http://schemas.android.com/apk/res/android" >
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android" >
     
-    <item android:title="@string/arealist_edit"
-        android:id="@+id/edit" />
-	
-	<item android:title="@string/arealist_rename"
-	    android:id="@+id/rename" />
-	
-	<item android:title="@string/arealist_learn"
-	    android:id="@+id/learn" />
-	
-	<item android:title="@string/arealist_delete"
-	    android:id="@+id/delete" />
-</menu>
+    <Preference
+        android:key="profile"
+        android:title="@string/areaedit_profile"
+        android:persistent="false" />
+
+    <CheckBoxPreference
+        android:key="wifi_enabled"
+        android:title="@string/areaedit_wifi"
+        android:persistent="false" />
+
+</PreferenceScreen>

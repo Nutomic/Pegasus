@@ -34,7 +34,6 @@ public class ProfileColumns implements BaseColumns {
 	public static final String NOTIFICATION_VOLUME = "notification_volume";
 	public static final String MEDIA_VOLUME = "media_volume";
 	public static final String ALARM_VOLUME = "alarm_volume";
-	public static final String WIFI_ENABLED = "wifi_enabled";
 	public static final String RINGER_MODE = "ringer_mode";
 	
 
@@ -45,7 +44,6 @@ public class ProfileColumns implements BaseColumns {
 			NOTIFICATION_VOLUME + " INTEGER," +
 			MEDIA_VOLUME + " INTEGER," +
 			ALARM_VOLUME + " INTEGER," +
-			WIFI_ENABLED + " INTEGER," +
 			RINGER_MODE + " INTEGER" +
 		    ");";
 

@@ -17,7 +17,7 @@
 <resources>
     
     <!-- General -->
-    <string name="version_name">0.1.0</string>
+    <string name="version_name">0.2.0</string>
     
     <!-- AreaList -->
     <!-- Millisecond values for R.stringarray.arealist_learn_area_strings -->
